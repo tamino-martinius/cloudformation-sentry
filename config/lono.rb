@@ -16,7 +16,7 @@ end
 
 [get_version(), 'master'].each do |version|
   ["internal", "internet-facing"].each do |visibility|
-    (1..3).each do |zones|
+    (2..3).each do |zones|
       generate(visibility, zones, version)
     end
   end
