@@ -12,16 +12,19 @@ Features:
 
 ## Getting Started
 
+[master-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internet-facing-2az.yaml
+[master-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internet-facing-3az.yaml
+[master-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internal-2az.yaml
+[master-internal-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internal-3az.yaml
+
 Choose from the templates below and either click "Launch Stack" or use ["Create Stack" in the CloudFormation AWS console](https://console.aws.amazon.com/cloudformation/home?#/stacks/new) and specify the relevant Amazon S3 template URL.
 
-| Name                                          | Click to launch                                                                                                                                                                                                                                   | S3 Link                                                                                            |
-|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
-| Internet-facing setup in 1 availability zone  | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internet-facing-1az.yaml)   | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internet-facing-1az.yaml`    |
-| Internet-facing setup in 2 availability zones | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internet-facing-2az.yaml)   | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internet-facing-2az.yaml`    |
-| Internet-facing setup in 3 availability zones | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internet-facing-3az.yaml)   | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internet-facing-3az.yaml`    |
-| Internal setup in 1 availability zone         | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internal-1az.yaml)          | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internal-1az.yaml`           |
-| Internal setup in 2 availability zones        | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internal-2az.yaml)          | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internal-2az.yaml`           |
-| Internal setup in 3 availability zones        | [![Launch Stack](assets/launch-stack.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3-eu-west-1.amazonaws.com%2Fsentry-formation%2Ftemplates%2Fmaster-internal-3az.yaml)          | `https://s3-eu-west-1.amazonaws.com/sentry-formation/templates/master-internal-3az.yaml`           |
+| Name                                          | Click to launch                                                        |
+| --------------------------------------------- | ---------------------------------------------------------------------- |
+| Internet-facing setup in 2 availability zones | [![Launch Stack](assets/launch-stack.png)][master-internet-facing-2az] |
+| Internet-facing setup in 3 availability zones | [![Launch Stack](assets/launch-stack.png)][master-internet-facing-3az] |
+| Internal setup in 2 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-2az]        |
+| Internal setup in 3 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-3az]        |
 
 If you don't want your new instances to automatically pull down new version of the setup scripts, then change the filename, switching `master` for the specific version you want to stick with e.g. `1.0.0`.
 
