@@ -428,7 +428,8 @@ Resources:
       StorageEncrypted: 'true'
       StorageType:
         Ref: DBStorageType
-      VPCSecurityGroups: !GetAtt PostgresSecurityGroup.GroupId
+      VPCSecurityGroups:
+      - !GetAtt PostgresSecurityGroup.GroupId
   ###### File Storage ######
   SentryFilesS3Bucket:
     Type: AWS::S3::Bucket

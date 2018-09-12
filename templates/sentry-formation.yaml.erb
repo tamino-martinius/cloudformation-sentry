@@ -139,7 +139,7 @@ Parameters:
     Default: db.t2.small
   DBMultiAZ:
     Type: String
-    Default: <%= @availability_zones > 1 %>
+    Default: true
     Description: Provides enhanced availablily for RDS
   DBStorageType:
     Type: String
@@ -833,7 +833,7 @@ Resources:
       - !GetAtt RedisAccessSecurityGroup.GroupId
       InstanceType:
         Ref: InstanceType
-      IamInstanceProfile: 
+      IamInstanceProfile:
         Ref: SentryInstanceProfile
       UserData:
         Fn::Base64:
@@ -863,7 +863,7 @@ Resources:
     Properties:
       LoadBalancerNames:
       - Ref: SentryElasticLoadBalancer
-      MinSize: 
+      MinSize:
         Ref: ScalingMinNodes
       MaxSize:
         Ref: ScalingMaxNodes
