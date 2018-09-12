@@ -8,7 +8,7 @@ Features:
 - EC2 Auto-scaling group (also gives zero-downtime upgrades)
 - Creates own VPC
 - Encryption using integrated KMS key
-- Limit sentry access to your GitHub organisation
+- Limit sentry access to your GitHub organization
 
 ## Getting Started
 
