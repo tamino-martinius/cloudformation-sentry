@@ -1,6 +1,6 @@
 # This file was generated with lono. Do not edit directly, the changes will be lost.
 # More info: https://github.com/tongueroo/lono
-Description: Sentry.io internal setup in 3 availability zones
+Description: Sentry.io internet-facing setup in 1 availability zones
 Mappings:
   RegionMap:
     ap-northeast-1:
@@ -446,6 +446,15 @@ Resources:
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+      SecurityGroupIngress:
+      - ToPort: '443'
+        IpProtocol: tcp
+        FromPort: '443'
+        CidrIp: 0.0.0.0/0
+      - ToPort: '443'
+        IpProtocol: tcp
+        FromPort: '443'
+        CidrIpv6: ::/0
       GroupDescription: An ELB group allowing access only to from the corresponding
         component
       Tags:
@@ -459,7 +468,7 @@ Resources:
     Properties:
       AvailabilityZones:
         Fn::GetAZs: ''
-      Scheme: internal
+      Scheme: internet-facing
       Listeners:
       - InstancePort: '443'
         Protocol: HTTPS

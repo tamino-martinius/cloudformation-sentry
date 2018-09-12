@@ -1,6 +1,6 @@
 # This file was generated with lono. Do not edit directly, the changes will be lost.
 # More info: https://github.com/tongueroo/lono
-Description: Sentry.io internal setup in 3 availability zones
+Description: Sentry.io internal setup in 1 availability zones
 Mappings:
   RegionMap:
     ap-northeast-1:

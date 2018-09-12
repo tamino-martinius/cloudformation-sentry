@@ -1,5 +1,5 @@
 def generate(visibility, zones, version, own_vpc)
-  template "#{version}-#{own_vpc ? 'own-vpc' : 'new-vpc'}-#{visibility}-#{zones}az.yaml" do
+  template "#{version}-#{own_vpc ? 'own-vpc' : 'new-vpc'}-#{visibility}#{own_vpc ? '' : "-#{zones}az"}.yaml" do
     source "sentry-formation.yaml.erb"
     variables(
       Description: "Sentry.io #{visibility} setup in #{zones} availability zones",
@@ -17,10 +17,9 @@ end
 
 [get_version(), 'master'].each do |version|
   ["internal", "internet-facing"].each do |visibility|
-    [true, false].each do |own_vpc|
-      (2..3).each do |zones|
-        generate(visibility, zones, version, own_vpc)
-      end
+    generate(visibility, 1, version, true)
+    (2..3).each do |zones|
+      generate(visibility, zones, version, false)
     end
   end
 end
