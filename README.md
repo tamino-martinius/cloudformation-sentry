@@ -73,7 +73,7 @@ Your site should then be available at https://33.33.33.20/
 
 ## Credits
 
-Original version developed by Karl Turner (@otaiga), Bradley Allen (@ValkyrieUK) and Daniel Bradley (@danielrbradley).
+[Original version](https://github.com/o2Labs/sentry-formation) developed by Karl Turner (@otaiga), Bradley Allen (@ValkyrieUK) and Daniel Bradley (@danielrbradley)
 
 [Using AWS KMS to Encrypt Values in CloudFormation Stacks](https://ben.fogbutter.com/2016/02/22/using-kms-to-encrypt-cloud-formation-values.html) by Ben Jones (@RealSalmon)
 
