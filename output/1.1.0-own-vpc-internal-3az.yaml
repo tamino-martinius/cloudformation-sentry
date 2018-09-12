@@ -621,6 +621,8 @@ Resources:
         Key: Name
         Value:
           Ref: AWS::StackName
+      AvailabilityZones:
+        Fn::GetAZs: ''
   SentryScalingPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
     Properties:

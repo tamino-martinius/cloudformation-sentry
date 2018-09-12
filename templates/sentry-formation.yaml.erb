@@ -904,7 +904,10 @@ Resources:
         Key: Name
         Value:
           Ref: AWS::StackName
-<% if !@own_vpc -%>
+<% if @own_vpc -%>
+      AvailabilityZones:
+        Fn::GetAZs: ''
+<% else -%>
       VPCZoneIdentifier:
 <% for @num in 1..@availability_zones -%>
         - Ref: PrivateSubnet<%= @num %>
