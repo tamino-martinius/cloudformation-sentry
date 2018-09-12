@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+export AWS_BUCKET_NAME="cloudformation-sentry"
+export AWS_REGION="us-east-1"
+
+export STACK_NAME="sentry-test"
+export OWNER='ParameterKey=Owner,ParameterValue="Example Company Name"'
+export SENTRY_USER='ParameterKey=SentryAdminUser,ParameterValue="sentry@example.com"'
+export SENTRY_PASSWORD='ParameterKey=SentryAdminPassword,ParameterValue="CHANGE_ME"'
+export DNS_NAME='ParameterKey=SentryPublicDnsName,ParameterValue="sentry.example.com"'
+export SSL_CERT_ARN='ParameterKey=SSLCertARN,ParameterValue="arn:aws:acm:eu-west-1:123456789:certificate/00000000-0000-0000-0000-000000000000"'
+export SSH_KEY_NAME='ParameterKey=KeyName,ParameterValue=ec2-ssh-key'
+export DB_USERNAME='ParameterKey=DBMasterUsername,ParameterValue="sentrydbadmin"'
+export DB_PASSWORD='ParameterKey=DBMasterUserPassword,ParameterValue="CHANGE_ME"'
+export SENTRY_SECRET_KEY='ParameterKey=SentrySecretKey,ParameterValue="CHANGE_ME"'
+export GITHUB_APP_ID='ParameterKey=SentryGithubAppId,ParameterValue="YOUR_GITHUB_APP_ID"'
+export GITHUB_API_SECRET='ParameterKey=SentryGithubApiSecret,ParameterValue="CHANGE_ME"'
+export MAIL_USERNAME='ParameterKey=SentryMailUsername,ParameterValue="sentrysmtpuser"'
+export MAIL_PASSWORD='ParameterKey=SentryMailPassword,ParameterValue="CHANGE_ME"'
+export MAIL_FROM='ParameterKey=SentryMailFrom,ParameterValue="sentry@example.com"'
