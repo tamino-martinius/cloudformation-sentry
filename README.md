@@ -26,7 +26,7 @@ Choose from the templates below and either click "Launch Stack" or use ["Create 
 | Internal setup in 2 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-2az]        |
 | Internal setup in 3 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-3az]        |
 
-If you don't want your new instances to automatically pull down new version of the setup scripts, then change the filename, switching `master` for the specific version you want to stick with e.g. `1.0.0`.
+If you don't want your new instances to automatically pull down new version of the setup scripts, then change the filename, switching `master` for the specific version you want to stick with e.g. `1.1.0`.
 
 ### What you need to provide
 
