@@ -16,6 +16,7 @@ export DB_PASSWORD='ParameterKey=DBMasterUserPassword,ParameterValue="CHANGE_ME"
 export SENTRY_SECRET_KEY='ParameterKey=SentrySecretKey,ParameterValue="CHANGE_ME"'
 export GITHUB_APP_ID='ParameterKey=SentryGithubAppId,ParameterValue="YOUR_GITHUB_APP_ID"'
 export GITHUB_API_SECRET='ParameterKey=SentryGithubApiSecret,ParameterValue="CHANGE_ME"'
+export MAIL_HOST='ParameterKey=SentryMailHost,ParameterValue="email-smtp.eu-west-1.amazonaws.com"'
 export MAIL_USERNAME='ParameterKey=SentryMailUsername,ParameterValue="sentrysmtpuser"'
 export MAIL_PASSWORD='ParameterKey=SentryMailPassword,ParameterValue="CHANGE_ME"'
 export MAIL_FROM='ParameterKey=SentryMailFrom,ParameterValue="sentry@example.com"'
