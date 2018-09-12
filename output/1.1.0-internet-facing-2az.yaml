@@ -1,6 +1,6 @@
 # This file was generated with lono. Do not edit directly, the changes will be lost.
 # More info: https://github.com/tongueroo/lono
-Description: Sentry.io internet-facing setup in 3 availability zones
+Description: Sentry.io internet-facing setup in 2 availability zones
 Mappings:
   RegionMap:
     ap-northeast-1:
@@ -108,10 +108,6 @@ Parameters:
     Description: The AvailabilityZone to use for subnet 2
     Type: AWS::EC2::AvailabilityZone::Name
     Default: eu-west-1b
-  VpcAvailabilityZone3:
-    Description: The AvailabilityZone to use for subnet 3
-    Type: AWS::EC2::AvailabilityZone::Name
-    Default: eu-west-1c
   VpcPublicSubnetCIDR1:
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Default: 10.0.0.0/26
@@ -122,11 +118,6 @@ Parameters:
     Default: 10.0.0.64/26
     Description: VPC CIDR Block for Public Subnet 2
     Type: String
-  VpcPublicSubnetCIDR3:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.1.0/26
-    Description: VPC CIDR Block for Public Subnet 3
-    Type: String
   VpcPrivateSubnetCIDR1:
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Default: 10.0.2.0/26
@@ -136,11 +127,6 @@ Parameters:
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Default: 10.0.2.64/26
     Description: VPC CIDR Block for Private Subnet 2
-    Type: String
-  VpcPrivateSubnetCIDR3:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.3.0/26
-    Description: VPC CIDR Block for Private Subnet 3
     Type: String
   ImageId:
     Description: The AMI to use for this Sentry - YUM compliant required
@@ -239,19 +225,6 @@ Resources:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'public', {Ref: VpcAvailabilityZone2}]
       VpcId: {Ref: VPC}
-  PublicSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone3}
-      CidrBlock: {Ref: VpcPublicSubnetCIDR3}
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', {Ref: VpcAvailabilityZone3}]
-      VpcId: {Ref: VPC}
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
@@ -277,19 +250,6 @@ Resources:
             Fn::Join:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'private', {Ref: VpcAvailabilityZone2}]
-      VpcId: {Ref: VPC}
-  PrivateSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone3}
-      CidrBlock: {Ref: VpcPrivateSubnetCIDR3}
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', {Ref: VpcAvailabilityZone3}]
       VpcId: {Ref: VPC}
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -339,13 +299,6 @@ Resources:
         Ref: PublicRouteTable
       SubnetId:
         Ref: PublicSubnet2
-  PublicSubnetAssoc3:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PublicRouteTable
-      SubnetId:
-        Ref: PublicSubnet3
   ###### Private Routing ######
   PrivateRouteTable1:
     Type: AWS::EC2::RouteTable
@@ -427,46 +380,6 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
         Ref: NAT2
-  PrivateRouteTable3:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private-3']
-      VpcId:
-        Ref: VPC
-  PrivateSubnetAssoc3:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable3
-      SubnetId:
-        Ref: PrivateSubnet3
-  EIP3:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  NAT3:
-    DependsOn: GatewayAttachment
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId:
-        Fn::GetAtt:
-        - EIP3
-        - AllocationId
-      SubnetId:
-        Ref: PublicSubnet3
-  NATRoute3:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable3
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId:
-        Ref: NAT3
   ###### Roles ######
   RootEncryptionRole:
     Type: AWS::IAM::Role
@@ -693,7 +606,6 @@ Resources:
       SubnetIds:
         - Ref: PrivateSubnet1
         - Ref: PrivateSubnet2
-        - Ref: PrivateSubnet3
   RedisCacheCluster:
     Type: AWS::ElastiCache::CacheCluster
     Properties:
@@ -746,7 +658,6 @@ Resources:
       SubnetIds:
         - Ref: PrivateSubnet1
         - Ref: PrivateSubnet2
-        - Ref: PrivateSubnet3
   PostgresInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -817,7 +728,6 @@ Resources:
       Subnets:
         - Ref: PublicSubnet1
         - Ref: PublicSubnet2
-        - Ref: PublicSubnet3
       Scheme: internet-facing
       Listeners:
       - InstancePort: '443'
@@ -955,13 +865,13 @@ Resources:
             - apt-get update
             - apt-get install ansible awscli unzip -y
             - openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=Private/CN=${AWS::StackName}" -days 3650 -keyout /tmp/server.key -out /tmp/bundle.crt -extensions v3_ca
-            - curl https://github.com/o2Labs/sentry-formation/archive/master.zip --output /tmp/repo.zip --location
+            - curl https://github.com/o2Labs/sentry-formation/archive/1.1.0.zip --output /tmp/repo.zip --location
             - unzip /tmp/repo.zip -d /tmp
             - echo "${DeploymentHosts}" > /tmp/hosts.base64
             - base64 -d /tmp/hosts.base64 > /tmp/hosts.encrypted
             - aws kms decrypt --region ${AWS::Region} --ciphertext-blob "fileb:///tmp/hosts.encrypted" --output text --query Plaintext > /tmp/hosts.decrypted
-            - base64 -d /tmp/hosts.decrypted > /tmp/sentry-formation-master/hosts
-            - ansible-playbook /tmp/sentry-formation-master/site.yml -i /tmp/sentry-formation-master/hosts
+            - base64 -d /tmp/hosts.decrypted > /tmp/sentry-formation-1.1.0/hosts
+            - ansible-playbook /tmp/sentry-formation-1.1.0/site.yml -i /tmp/sentry-formation-1.1.0/hosts
           - DeploymentHosts: !GetAtt EncryptedDeploymentHosts.CipherText
   SentryAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -987,7 +897,6 @@ Resources:
       VPCZoneIdentifier:
         - Ref: PrivateSubnet1
         - Ref: PrivateSubnet2
-        - Ref: PrivateSubnet3
   SentryScalingPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
     Properties:
