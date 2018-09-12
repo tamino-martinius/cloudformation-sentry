@@ -4,7 +4,7 @@ export AWS_BUCKET_NAME="cloudformation-sentry"
 export AWS_REGION="us-east-1"
 
 export STACK_NAME="sentry-test"
-export TEMPLATE="master-own-vpc-internet-facing-3az.yaml"
+export TEMPLATE="master-own-vpc-internet-facing.yaml"
 export OWNER='ParameterKey=Owner,ParameterValue="Example Company Name"'
 export SENTRY_USER='ParameterKey=SentryAdminUser,ParameterValue="sentry@example.com"'
 export SENTRY_PASSWORD='ParameterKey=SentryAdminPassword,ParameterValue="CHANGE_ME"'

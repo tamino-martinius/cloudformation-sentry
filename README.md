@@ -12,10 +12,8 @@ Features:
 
 ## Getting Started
 
-[master-own-vpc-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internet-facing-2az.yaml
-[master-own-vpc-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internet-facing-3az.yaml
-[master-own-vpc-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internal-2az.yaml
-[master-own-vpc-internal-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internal-3az.yaml
+[master-own-vpc-internet-facing]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internet-facing.yaml
+[master-own-vpc-internal]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internal.yaml
 [master-new-vpc-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internet-facing-2az.yaml
 [master-new-vpc-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internet-facing-3az.yaml
 [master-new-vpc-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internal-2az.yaml
@@ -25,10 +23,8 @@ Choose from the templates below and either click "Launch Stack" or use ["Create 
 
 | VPC   | Connection | Zones | Click to launch                                                                |
 | :---: | :--------: | :---: | :----------------------------------------------------------------------------: |
-| own   | Internet   | 2     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internet-facing-2az] |
-| own   | Internet   | 3     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internet-facing-3az] |
-| own   | Internal   | 2     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internal-2az]        |
-| own   | Internal   | 3     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internal-3az]        |
+| own   | Internet   |       | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internet-facing]     |
+| own   | Internal   |       | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internal]            |
 | new   | Internet   | 2     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internet-facing-2az] |
 | new   | Internet   | 3     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internet-facing-3az] |
 | new   | Internal   | 2     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internal-2az]        |
