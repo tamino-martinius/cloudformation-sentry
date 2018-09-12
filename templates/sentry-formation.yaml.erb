@@ -97,6 +97,7 @@ Parameters:
     Type: String
 
   #### Optional ####
+<% if !@own_vpc -%>
   VpcCidr:
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Description: VPC Cidr block
@@ -115,6 +116,7 @@ Parameters:
     Default: 10.0.<%= ((@num + 3) / 2).floor  %>.<%= (@num - 1) * 64 % 128  %>/26
     Description: VPC CIDR Block for Private Subnet <%= @num %>
     Type: String
+<% end -%>
 <% end -%>
   InstanceType:
     Description: The size of the EC2 instances
@@ -173,7 +175,9 @@ Parameters:
 
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
+<% if !@own_vpc -%>
   ###### Network ######
+
   VPC:
     Type: 'AWS::EC2::VPC'
     Properties:
@@ -311,6 +315,7 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId:
         Ref: NAT<%= @num %>
+<% end -%>
 <% end -%>
 
   ###### Roles ######
@@ -529,8 +534,10 @@ Resources:
   RedisAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
+<% end -%>
       GroupDescription: Allows access only to sentry redis cluster
       Tags:
         - Key: Name
@@ -547,9 +554,11 @@ Resources:
       - IpProtocol: tcp
         FromPort: '6379'
         ToPort: '6379'
+        SourceSecurityGroupId: !GetAtt RedisAccessSecurityGroup.GroupId
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
-        SourceSecurityGroupId: !GetAtt RedisAccessSecurityGroup.GroupId
+<% end -%>
       Tags:
         - Key: Name
           Value:
@@ -557,6 +566,7 @@ Resources:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'Redis']
 
+<% if !@own_vpc -%>
   RedisSubnetGroup:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
@@ -565,14 +575,17 @@ Resources:
 <% for @num in 1..@availability_zones -%>
         - Ref: PrivateSubnet<%= @num %>
 <% end -%>
+<% end -%>
 
   RedisCacheCluster:
     Type: AWS::ElastiCache::CacheCluster
     Properties:
       CacheNodeType:
         Ref: RedisNodeType
+<% if !@own_vpc -%>
       CacheSubnetGroupName:
         Ref: RedisSubnetGroup
+<% end -%>
       Engine: redis
       EngineVersion:
         Ref: RedisEngineVersion
@@ -585,8 +598,10 @@ Resources:
   PostgresAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
+<% end -%>
       GroupDescription: Allows access only to sentry postgres instance
       Tags:
         - Key: Name
@@ -602,9 +617,11 @@ Resources:
       - ToPort: '5432'
         IpProtocol: tcp
         FromPort: '5432'
+        SourceSecurityGroupId: !GetAtt PostgresAccessSecurityGroup.GroupId
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
-        SourceSecurityGroupId: !GetAtt PostgresAccessSecurityGroup.GroupId
+<% end -%>
       GroupDescription: Senty postgres instance source
       Tags:
         - Key: Name
@@ -613,6 +630,7 @@ Resources:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'Postgres']
 
+<% if !@own_vpc -%>
   PostgresSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -620,6 +638,7 @@ Resources:
       SubnetIds:
 <% for @num in 1..@availability_zones -%>
         - Ref: PrivateSubnet<%= @num %>
+<% end -%>
 <% end -%>
 
   PostgresInstance:
@@ -647,9 +666,11 @@ Resources:
       StorageEncrypted: 'true'
       StorageType:
         Ref: DBStorageType
-      VPCSecurityGroups:
+<% if !@own_vpc -%>
       DBSubnetGroupName:
         Ref: PostgresSubnetGroup
+<% end -%>
+      VPCSecurityGroups:
       - !GetAtt PostgresSecurityGroup.GroupId
 
   ###### File Storage ######
@@ -682,8 +703,10 @@ Resources:
         FromPort: '443'
         CidrIpv6: ::/0
 <% end -%>
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
+<% end -%>
       GroupDescription: An ELB group allowing access only to from the corresponding
         component
       Tags:
@@ -696,12 +719,17 @@ Resources:
   SentryElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
+<% if @own_vpc -%>
+      AvailabilityZones:
+        Fn::GetAZs: ''
+<% else -%>
       Subnets:
 <% for @num in 1..@availability_zones -%>
 <% if @visibility === "internet-facing" -%>
         - Ref: PublicSubnet<%= @num %>
 <% else -%>
         - Ref: PrivateSubnet<%= @num %>
+<% end -%>
 <% end -%>
 <% end -%>
       Scheme: <%= @visibility %>
@@ -770,9 +798,11 @@ Resources:
       - ToPort: '443'
         IpProtocol: tcp
         FromPort: '443'
+        SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
+<% if !@own_vpc -%>
       VpcId:
         Ref: VPC
-        SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
+<% end -%>
       GroupDescription: Sentry instance security group, gives access to from load balancer
       Tags:
         - Key: Name
@@ -874,9 +904,11 @@ Resources:
         Key: Name
         Value:
           Ref: AWS::StackName
+<% if !@own_vpc -%>
       VPCZoneIdentifier:
 <% for @num in 1..@availability_zones -%>
         - Ref: PrivateSubnet<%= @num %>
+<% end -%>
 <% end -%>
 
   SentryScalingPolicy:
