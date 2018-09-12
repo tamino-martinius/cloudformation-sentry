@@ -12,19 +12,27 @@ Features:
 
 ## Getting Started
 
-[master-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internet-facing-2az.yaml
-[master-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internet-facing-3az.yaml
-[master-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internal-2az.yaml
-[master-internal-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-internal-3az.yaml
+[master-own-vpc-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internet-facing-2az.yaml
+[master-own-vpc-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internet-facing-3az.yaml
+[master-own-vpc-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internal-2az.yaml
+[master-own-vpc-internal-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-own-vpc-internal-3az.yaml
+[master-new-vpc-internet-facing-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internet-facing-2az.yaml
+[master-new-vpc-internet-facing-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internet-facing-3az.yaml
+[master-new-vpc-internal-2az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internal-2az.yaml
+[master-new-vpc-internal-3az]: https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=sentry&templateURL=https:%2F%2Fs3.amazonaws.com/cloudformation-sentry/master-new-vpc-internal-3az.yaml
 
 Choose from the templates below and either click "Launch Stack" or use ["Create Stack" in the CloudFormation AWS console](https://console.aws.amazon.com/cloudformation/home?#/stacks/new) and specify the relevant Amazon S3 template URL.
 
-| Name                                          | Click to launch                                                        |
-| --------------------------------------------- | ---------------------------------------------------------------------- |
-| Internet-facing setup in 2 availability zones | [![Launch Stack](assets/launch-stack.png)][master-internet-facing-2az] |
-| Internet-facing setup in 3 availability zones | [![Launch Stack](assets/launch-stack.png)][master-internet-facing-3az] |
-| Internal setup in 2 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-2az]        |
-| Internal setup in 3 availability zones        | [![Launch Stack](assets/launch-stack.png)][master-internal-3az]        |
+| VPC   | Connection | Zones | Click to launch                                                                |
+| :---: | :--------: | :---: | :----------------------------------------------------------------------------: |
+| own   | Internet   | 2     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internet-facing-2az] |
+| own   | Internet   | 3     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internet-facing-3az] |
+| own   | Internal   | 2     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internal-2az]        |
+| own   | Internal   | 3     | [![Launch Stack](assets/launch-stack.png)][master-own-vpc-internal-3az]        |
+| new   | Internet   | 2     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internet-facing-2az] |
+| new   | Internet   | 3     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internet-facing-3az] |
+| new   | Internal   | 2     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internal-2az]        |
+| new   | Internal   | 3     | [![Launch Stack](assets/launch-stack.png)][master-new-vpc-internal-3az]        |
 
 If you don't want your new instances to automatically pull down new version of the setup scripts, then change the filename, switching `master` for the specific version you want to stick with e.g. `1.1.0`.
 
