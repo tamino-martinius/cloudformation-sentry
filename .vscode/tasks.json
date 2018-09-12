@@ -23,5 +23,16 @@
         "isDefault": true
       },
     },
+    {
+      "type": "shell",
+      "label": "upload",
+      "command": "./copy-templates-to-s3.sh",
+      "dependsOn": [],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+    },
   ]
 }
