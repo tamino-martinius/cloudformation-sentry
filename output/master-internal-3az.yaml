@@ -100,18 +100,6 @@ Parameters:
     Description: VPC Cidr block
     Default: 10.0.0.0/22
     Type: String
-  VpcAvailabilityZone1:
-    Description: The AvailabilityZone to use for subnet 1
-    Type: AWS::EC2::AvailabilityZone::Name
-    Default: eu-west-1a
-  VpcAvailabilityZone2:
-    Description: The AvailabilityZone to use for subnet 2
-    Type: AWS::EC2::AvailabilityZone::Name
-    Default: eu-west-1b
-  VpcAvailabilityZone3:
-    Description: The AvailabilityZone to use for subnet 3
-    Type: AWS::EC2::AvailabilityZone::Name
-    Default: eu-west-1c
   VpcPublicSubnetCIDR1:
     AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
     Default: 10.0.0.0/26
@@ -201,7 +189,7 @@ Resources:
   ###### Network ######
   VPC:
     Type: 'AWS::EC2::VPC'
-    Properties: 
+    Properties:
       CidrBlock:
         Ref: VpcCidr
       EnableDnsHostnames: true
@@ -212,7 +200,7 @@ Resources:
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone1}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "a"]]
       CidrBlock: {Ref: VpcPublicSubnetCIDR1}
       MapPublicIpOnLaunch: true
       Tags:
@@ -220,12 +208,12 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', {Ref: VpcAvailabilityZone1}]
+              - [{Ref: 'AWS::StackName'}, 'public', !Join ['', [!Ref "AWS::Region", "a"]]]
       VpcId: {Ref: VPC}
   PublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone2}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "b"]]
       CidrBlock: {Ref: VpcPublicSubnetCIDR2}
       MapPublicIpOnLaunch: true
       Tags:
@@ -233,12 +221,12 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', {Ref: VpcAvailabilityZone2}]
+              - [{Ref: 'AWS::StackName'}, 'public', !Join ['', [!Ref "AWS::Region", "b"]]]
       VpcId: {Ref: VPC}
   PublicSubnet3:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone3}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "c"]]
       CidrBlock: {Ref: VpcPublicSubnetCIDR3}
       MapPublicIpOnLaunch: true
       Tags:
@@ -246,12 +234,12 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', {Ref: VpcAvailabilityZone3}]
+              - [{Ref: 'AWS::StackName'}, 'public', !Join ['', [!Ref "AWS::Region", "c"]]]
       VpcId: {Ref: VPC}
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone1}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "a"]]
       CidrBlock: {Ref: VpcPrivateSubnetCIDR1}
       MapPublicIpOnLaunch: false
       Tags:
@@ -259,12 +247,12 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', {Ref: VpcAvailabilityZone1}]
+              - [{Ref: 'AWS::StackName'}, 'private', !Join ['', [!Ref "AWS::Region", "a"]]]
       VpcId: {Ref: VPC}
   PrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone2}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "b"]]
       CidrBlock: {Ref: VpcPrivateSubnetCIDR2}
       MapPublicIpOnLaunch: false
       Tags:
@@ -272,12 +260,12 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', {Ref: VpcAvailabilityZone2}]
+              - [{Ref: 'AWS::StackName'}, 'private', !Join ['', [!Ref "AWS::Region", "b"]]]
       VpcId: {Ref: VPC}
   PrivateSubnet3:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: {Ref: VpcAvailabilityZone3}
+      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "c"]]
       CidrBlock: {Ref: VpcPrivateSubnetCIDR3}
       MapPublicIpOnLaunch: false
       Tags:
@@ -285,7 +273,7 @@ Resources:
           Value:
             Fn::Join:
               - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', {Ref: VpcAvailabilityZone3}]
+              - [{Ref: 'AWS::StackName'}, 'private', !Join ['', [!Ref "AWS::Region", "c"]]]
       VpcId: {Ref: VPC}
   InternetGateway:
     Type: AWS::EC2::InternetGateway
