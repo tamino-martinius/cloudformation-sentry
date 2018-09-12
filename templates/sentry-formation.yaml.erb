@@ -547,10 +547,9 @@ Resources:
       - IpProtocol: tcp
         FromPort: '6379'
         ToPort: '6379'
-        SourceSecurityGroupId:
-          Ref: RedisAccessSecurityGroup
       VpcId:
         Ref: VPC
+        SourceSecurityGroupId: !GetAtt RedisAccessSecurityGroup.GroupId
       Tags:
         - Key: Name
           Value:
@@ -580,7 +579,7 @@ Resources:
       NumCacheNodes:
         Ref: RedisNumNodes
       VpcSecurityGroupIds:
-      - Ref: RedisSecurityGroup
+      - !GetAtt RedisSecurityGroup.GroupId
 
   ###### Postgres ######
   PostgresAccessSecurityGroup:
@@ -603,10 +602,9 @@ Resources:
       - ToPort: '5432'
         IpProtocol: tcp
         FromPort: '5432'
-        SourceSecurityGroupId:
-          Ref: PostgresAccessSecurityGroup
       VpcId:
         Ref: VPC
+        SourceSecurityGroupId: !GetAtt PostgresAccessSecurityGroup.GroupId
       GroupDescription: Senty postgres instance source
       Tags:
         - Key: Name
@@ -650,9 +648,9 @@ Resources:
       StorageType:
         Ref: DBStorageType
       VPCSecurityGroups:
-      - Ref: PostgresSecurityGroup
       DBSubnetGroupName:
         Ref: PostgresSubnetGroup
+      - !GetAtt PostgresSecurityGroup.GroupId
 
   ###### File Storage ######
 
@@ -750,7 +748,7 @@ Resources:
           Value: 'true'
       CrossZone: false
       SecurityGroups:
-      - Ref: LoadBalancerSecurityGroup
+      - !GetAtt LoadBalancerSecurityGroup.GroupId
       HealthCheck:
         HealthyThreshold: 3
         Interval: 10
@@ -772,10 +770,9 @@ Resources:
       - ToPort: '443'
         IpProtocol: tcp
         FromPort: '443'
-        SourceSecurityGroupId:
-          Ref: LoadBalancerSecurityGroup
       VpcId:
         Ref: VPC
+        SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
       GroupDescription: Sentry instance security group, gives access to from load balancer
       Tags:
         - Key: Name
@@ -831,9 +828,9 @@ Resources:
         Ref: KeyName
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "docker1604"]
       SecurityGroups:
-      - Ref: SentrySecurityGroup
-      - Ref: PostgresAccessSecurityGroup
-      - Ref: RedisAccessSecurityGroup
+      - !GetAtt SentrySecurityGroup.GroupId
+      - !GetAtt PostgresAccessSecurityGroup.GroupId
+      - !GetAtt RedisAccessSecurityGroup.GroupId
       InstanceType:
         Ref: InstanceType
       IamInstanceProfile: 

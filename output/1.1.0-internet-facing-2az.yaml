@@ -95,31 +95,6 @@ Parameters:
     Description: Sending email address for sentry to use to send email
     Type: String
   #### Optional ####
-  VpcCidr:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Description: VPC Cidr block
-    Default: 10.0.0.0/22
-    Type: String
-  VpcPublicSubnetCIDR1:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.0.0/26
-    Description: VPC CIDR Block for Public Subnet 1
-    Type: String
-  VpcPublicSubnetCIDR2:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.0.64/26
-    Description: VPC CIDR Block for Public Subnet 2
-    Type: String
-  VpcPrivateSubnetCIDR1:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.2.0/26
-    Description: VPC CIDR Block for Private Subnet 1
-    Type: String
-  VpcPrivateSubnetCIDR2:
-    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
-    Default: 10.0.2.64/26
-    Description: VPC CIDR Block for Private Subnet 2
-    Type: String
   InstanceType:
     Description: The size of the EC2 instances
     Default: t2.medium
@@ -176,198 +151,6 @@ Parameters:
     Default: 2
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  ###### Network ######
-  VPC:
-    Type: 'AWS::EC2::VPC'
-    Properties:
-      CidrBlock:
-        Ref: VpcCidr
-      EnableDnsHostnames: true
-      Tags:
-        - Key: Name
-          Value:
-            Ref: AWS::StackName
-  PublicSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "a"]]
-      CidrBlock: {Ref: VpcPublicSubnetCIDR1}
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', !Join ['', [!Ref "AWS::Region", "a"]]]
-      VpcId: {Ref: VPC}
-  PublicSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "b"]]
-      CidrBlock: {Ref: VpcPublicSubnetCIDR2}
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'public', !Join ['', [!Ref "AWS::Region", "b"]]]
-      VpcId: {Ref: VPC}
-  PrivateSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "a"]]
-      CidrBlock: {Ref: VpcPrivateSubnetCIDR1}
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', !Join ['', [!Ref "AWS::Region", "a"]]]
-      VpcId: {Ref: VPC}
-  PrivateSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      AvailabilityZone: !Join ['', [!Ref "AWS::Region", "b"]]
-      CidrBlock: {Ref: VpcPrivateSubnetCIDR2}
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private', !Join ['', [!Ref "AWS::Region", "b"]]]
-      VpcId: {Ref: VPC}
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-      - Key: Name
-        Value:
-          Ref: AWS::StackName
-  GatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      InternetGatewayId:
-        Ref: InternetGateway
-      VpcId:
-        Ref: VPC
-  ###### Public Routing ######
-  PublicRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'public']
-      VpcId:
-        Ref: VPC
-  PublicRoute:
-    Type: AWS::EC2::Route
-    Properties:
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: InternetGateway
-      RouteTableId:
-        Ref: PublicRouteTable
-  PublicSubnetAssoc1:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PublicRouteTable
-      SubnetId:
-        Ref: PublicSubnet1
-  PublicSubnetAssoc2:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PublicRouteTable
-      SubnetId:
-        Ref: PublicSubnet2
-  ###### Private Routing ######
-  PrivateRouteTable1:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private-1']
-      VpcId:
-        Ref: VPC
-  PrivateSubnetAssoc1:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable1
-      SubnetId:
-        Ref: PrivateSubnet1
-  EIP1:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  NAT1:
-    DependsOn: GatewayAttachment
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId:
-        Fn::GetAtt:
-        - EIP1
-        - AllocationId
-      SubnetId:
-        Ref: PublicSubnet1
-  NATRoute1:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable1
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId:
-        Ref: NAT1
-  PrivateRouteTable2:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      Tags:
-        - Key: Name
-          Value:
-            Fn::Join:
-              - '-'
-              - [{Ref: 'AWS::StackName'}, 'private-2']
-      VpcId:
-        Ref: VPC
-  PrivateSubnetAssoc2:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable2
-      SubnetId:
-        Ref: PrivateSubnet2
-  EIP2:
-    Type: AWS::EC2::EIP
-    Properties:
-      Domain: vpc
-  NAT2:
-    DependsOn: GatewayAttachment
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId:
-        Fn::GetAtt:
-        - EIP2
-        - AllocationId
-      SubnetId:
-        Ref: PublicSubnet2
-  NATRoute2:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: PrivateRouteTable2
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId:
-        Ref: NAT2
   ###### Roles ######
   RootEncryptionRole:
     Type: AWS::IAM::Role
@@ -560,8 +343,6 @@ Resources:
   RedisAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId:
-        Ref: VPC
       GroupDescription: Allows access only to sentry redis cluster
       Tags:
         - Key: Name
@@ -577,43 +358,29 @@ Resources:
       - IpProtocol: tcp
         FromPort: '6379'
         ToPort: '6379'
-        SourceSecurityGroupId:
-          Ref: RedisAccessSecurityGroup
-      VpcId:
-        Ref: VPC
+        SourceSecurityGroupId: !GetAtt RedisAccessSecurityGroup.GroupId
       Tags:
         - Key: Name
           Value:
             Fn::Join:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'Redis']
-  RedisSubnetGroup:
-    Type: AWS::ElastiCache::SubnetGroup
-    Properties:
-      Description: Sentry stack redis subnet group
-      SubnetIds:
-        - Ref: PrivateSubnet1
-        - Ref: PrivateSubnet2
   RedisCacheCluster:
     Type: AWS::ElastiCache::CacheCluster
     Properties:
       CacheNodeType:
         Ref: RedisNodeType
-      CacheSubnetGroupName:
-        Ref: RedisSubnetGroup
       Engine: redis
       EngineVersion:
         Ref: RedisEngineVersion
       NumCacheNodes:
         Ref: RedisNumNodes
       VpcSecurityGroupIds:
-      - Ref: RedisSecurityGroup
+      - !GetAtt RedisSecurityGroup.GroupId
   ###### Postgres ######
   PostgresAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId:
-        Ref: VPC
       GroupDescription: Allows access only to sentry postgres instance
       Tags:
         - Key: Name
@@ -628,10 +395,7 @@ Resources:
       - ToPort: '5432'
         IpProtocol: tcp
         FromPort: '5432'
-        SourceSecurityGroupId:
-          Ref: PostgresAccessSecurityGroup
-      VpcId:
-        Ref: VPC
+        SourceSecurityGroupId: !GetAtt PostgresAccessSecurityGroup.GroupId
       GroupDescription: Senty postgres instance source
       Tags:
         - Key: Name
@@ -639,13 +403,6 @@ Resources:
             Fn::Join:
               - '-'
               - [{Ref: 'AWS::StackName'}, 'Postgres']
-  PostgresSubnetGroup:
-    Type: AWS::RDS::DBSubnetGroup
-    Properties:
-      DBSubnetGroupDescription: Sentry stack postgres subnet group
-      SubnetIds:
-        - Ref: PrivateSubnet1
-        - Ref: PrivateSubnet2
   PostgresInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -671,10 +428,7 @@ Resources:
       StorageEncrypted: 'true'
       StorageType:
         Ref: DBStorageType
-      VPCSecurityGroups:
-      - Ref: PostgresSecurityGroup
-      DBSubnetGroupName:
-        Ref: PostgresSubnetGroup
+      VPCSecurityGroups: !GetAtt PostgresSecurityGroup.GroupId
   ###### File Storage ######
   SentryFilesS3Bucket:
     Type: AWS::S3::Bucket
@@ -700,8 +454,6 @@ Resources:
         IpProtocol: tcp
         FromPort: '443'
         CidrIpv6: ::/0
-      VpcId:
-        Ref: VPC
       GroupDescription: An ELB group allowing access only to from the corresponding
         component
       Tags:
@@ -713,10 +465,9 @@ Resources:
   SentryElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-      Subnets:
-        - Ref: PublicSubnet1
-        - Ref: PublicSubnet2
       Scheme: internet-facing
+      AvailabilityZones:
+        Fn::GetAZs: ''
       Listeners:
       - InstancePort: '443'
         Protocol: HTTPS
@@ -760,7 +511,7 @@ Resources:
           Value: 'true'
       CrossZone: false
       SecurityGroups:
-      - Ref: LoadBalancerSecurityGroup
+      - !GetAtt LoadBalancerSecurityGroup.GroupId
       HealthCheck:
         HealthyThreshold: 3
         Interval: 10
@@ -780,10 +531,7 @@ Resources:
       - ToPort: '443'
         IpProtocol: tcp
         FromPort: '443'
-        SourceSecurityGroupId:
-          Ref: LoadBalancerSecurityGroup
-      VpcId:
-        Ref: VPC
+        SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
       GroupDescription: Sentry instance security group, gives access to from load balancer
       Tags:
         - Key: Name
@@ -836,12 +584,12 @@ Resources:
         Ref: KeyName
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", "docker1604"]
       SecurityGroups:
-      - Ref: SentrySecurityGroup
-      - Ref: PostgresAccessSecurityGroup
-      - Ref: RedisAccessSecurityGroup
+      - !GetAtt SentrySecurityGroup.GroupId
+      - !GetAtt PostgresAccessSecurityGroup.GroupId
+      - !GetAtt RedisAccessSecurityGroup.GroupId
       InstanceType:
         Ref: InstanceType
-      IamInstanceProfile: 
+      IamInstanceProfile:
         Ref: SentryInstanceProfile
       UserData:
         Fn::Base64:
@@ -870,7 +618,7 @@ Resources:
     Properties:
       LoadBalancerNames:
       - Ref: SentryElasticLoadBalancer
-      MinSize: 
+      MinSize:
         Ref: ScalingMinNodes
       MaxSize:
         Ref: ScalingMaxNodes
@@ -881,9 +629,6 @@ Resources:
         Key: Name
         Value:
           Ref: AWS::StackName
-      VPCZoneIdentifier:
-        - Ref: PrivateSubnet1
-        - Ref: PrivateSubnet2
   SentryScalingPolicy:
     Type: AWS::AutoScaling::ScalingPolicy
     Properties:
