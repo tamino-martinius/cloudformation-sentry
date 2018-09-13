@@ -738,9 +738,9 @@ Resources:
 <% end -%>
       Scheme: <%= @visibility %>
       Listeners:
-      - InstancePort: '443'
+      - InstancePort: '80'
+        InstanceProtocol: HTTP
         Protocol: HTTPS
-        InstanceProtocol: HTTPS
         LoadBalancerPort: '443'
         SSLCertificateId:
           Ref: SSLCertARN
@@ -799,9 +799,9 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       SecurityGroupIngress:
-      - ToPort: '443'
+      - ToPort: '80'
         IpProtocol: tcp
-        FromPort: '443'
+        FromPort: '80'
         SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
 <% if !@own_vpc -%>
       VpcId:
