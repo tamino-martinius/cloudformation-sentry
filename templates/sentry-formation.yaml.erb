@@ -666,6 +666,10 @@ Resources:
       StorageEncrypted: 'true'
       StorageType:
         Ref: DBStorageType
+      DBInstanceIdentifier:
+        Fn::Join:
+          - '-'
+          - [{Ref: 'AWS::StackName'}, 'DB']
 <% if !@own_vpc -%>
       DBSubnetGroupName:
         Ref: PostgresSubnetGroup
