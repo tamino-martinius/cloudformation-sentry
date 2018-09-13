@@ -883,8 +883,8 @@ Resources:
             - echo "${DeploymentHosts}" > /tmp/hosts.base64
             - base64 -d /tmp/hosts.base64 > /tmp/hosts.encrypted
             - aws kms decrypt --region ${AWS::Region} --ciphertext-blob "fileb:///tmp/hosts.encrypted" --output text --query Plaintext > /tmp/hosts.decrypted
-            - base64 -d /tmp/hosts.decrypted > /tmp/sentry-formation-<%= @version %>/hosts
-            - ansible-playbook /tmp/sentry-formation-<%= @version %>/site.yml -i /tmp/sentry-formation-<%= @version %>/hosts
+            - base64 -d /tmp/hosts.decrypted > /tmp/cloudformation-sentry-<%= @version %>/hosts
+            - ansible-playbook /tmp/cloudformation-sentry-<%= @version %>/site.yml -i /tmp/cloudformation-sentry-<%= @version %>/hosts
           - DeploymentHosts: !GetAtt EncryptedDeploymentHosts.CipherText
 
   SentryAutoScalingGroup:
