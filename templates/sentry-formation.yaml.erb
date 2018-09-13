@@ -164,6 +164,14 @@ Parameters:
     Description: SMTP port for sentry to use to send email
     Type: String
     Default: '25'
+  SlackClientId:
+    Description: Id of Slack Client (can be aquired at https://api.slack.com/apps/new_app_token)
+    Type: String
+    Default: ''
+  SlackClientSecret:
+    Description: Secret of Slack Client (can be aquired at https://api.slack.com/apps/new_app_token)
+    Type: String
+    Default: ''
   ScalingMinNodes:
     Type: Number
     Description: Minium size of the auto scaling group
@@ -389,11 +397,11 @@ Resources:
 
   SentryEncryptionKey:
     Type: "AWS::KMS::Key"
-    Properties: 
+    Properties:
       Description: Sentry environment root encryption key
-      KeyPolicy: 
+      KeyPolicy:
         Version: "2012-10-17"
-        Statement: 
+        Statement:
           - Sid: "Enable IAM User Permissions"
             Effect: "Allow"
             Principal:
@@ -405,10 +413,10 @@ Resources:
             Resource: "*"
           - Sid: "Allow administration of the key"
             Effect: "Allow"
-            Principal: 
+            Principal:
               AWS:
                 - !GetAtt RootEncryptionRole.Arn
-            Action: 
+            Action:
               - "kms:Create*"
               - "kms:Describe*"
               - "kms:Enable*"
@@ -430,7 +438,7 @@ Resources:
               AWS:
                 - !GetAtt LambdaExecutionRole.Arn
                 - !GetAtt SentryRole.Arn
-            Action: 
+            Action:
               - "kms:Encrypt"
               - "kms:Decrypt"
               - "kms:ReEncrypt*"
@@ -786,7 +794,7 @@ Resources:
         Interval: 10
         Timeout: 5
         UnhealthyThreshold: 10
-        Target: HTTPS:443/_health/
+        Target: HTTP:80/_health/
 
   SentryInstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -850,7 +858,10 @@ Resources:
           sentry_mail_username="${SentryMailUsername}"
           sentry_mail_password="${SentryMailPassword}"
           sentry_mail_from="${SentryMailFrom}"
+          slack_client_id="${SlackClientId}"
+          slack_client_secret="${SlackClientSecret}"
           sentry_files_bucket_name="${AWS::AccountId}-${AWS::StackName}-sentry-files"
+          aws_region="${AWS::Region}"
         - SentryUrl: !GetAtt SentryElasticLoadBalancer.DNSName
           DBHost: !GetAtt PostgresInstance.Endpoint.Address
           RedisHost: !GetAtt RedisCacheCluster.RedisEndpoint.Address
