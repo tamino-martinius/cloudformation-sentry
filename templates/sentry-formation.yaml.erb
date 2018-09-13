@@ -878,7 +878,7 @@ Resources:
             - apt-get update
             - apt-get install ansible awscli unzip -y
             - openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=Private/CN=${AWS::StackName}" -days 3650 -keyout /tmp/server.key -out /tmp/bundle.crt -extensions v3_ca
-            - curl https://github.com/o2Labs/sentry-formation/archive/<%= @version %>.zip --output /tmp/repo.zip --location
+            - curl https://github.com/tamino-martinius/cloudformation-sentry/archive/<%= @version %>.zip --output /tmp/repo.zip --location
             - unzip /tmp/repo.zip -d /tmp
             - echo "${DeploymentHosts}" > /tmp/hosts.base64
             - base64 -d /tmp/hosts.base64 > /tmp/hosts.encrypted
