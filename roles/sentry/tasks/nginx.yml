@@ -15,28 +15,3 @@
   notify:
     - Restart nginx
   tags: nginx
-
-- name: create ssl directory
-  file: path=/etc/nginx/ssl state=directory
-  notify:
-    - Restart nginx
-  tags: nginx
-
-- name: create self-signed SSL cert
-  command: 'openssl req -new -nodes -x509 -subj "/O={{owner}}/CN={{ansible_fqdn}}" -days 3650 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/bundle.crt -extensions v3_ca creates=/etc/nginx/ssl/bundle.crt'
-  notify:
-    - Restart nginx
-  tags: nginx
-
-- name: set SSL cert permissions
-  file:
-    path: /etc/nginx/ssl/{{ item }}
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    mode: 0755
-  with_items:
-    - "bundle.crt"
-    - "server.key"
-  notify:
-    - Restart nginx
-  tags: nginx
