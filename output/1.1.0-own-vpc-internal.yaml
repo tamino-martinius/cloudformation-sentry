@@ -570,6 +570,7 @@ Resources:
           sentry_mail_password="${SentryMailPassword}"
           sentry_mail_from="${SentryMailFrom}"
           sentry_files_bucket_name="${AWS::AccountId}-${AWS::StackName}-sentry-files"
+          aws_region="${AWS::Region}"
         - SentryUrl: !GetAtt SentryElasticLoadBalancer.DNSName
           DBHost: !GetAtt PostgresInstance.Endpoint.Address
           RedisHost: !GetAtt RedisCacheCluster.RedisEndpoint.Address
