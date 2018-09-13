@@ -132,7 +132,7 @@ Parameters:
     Type: String
   InstanceType:
     Description: The size of the EC2 instances
-    Default: t2.medium
+    Default: t2.xlarge
     Type: String
   DBName:
     Type: String
@@ -150,7 +150,7 @@ Parameters:
     Default: '7'
   DBInstanceClass:
     Type: String
-    Default: db.t2.small
+    Default: db.t2.medium
   DBMultiAZ:
     Type: String
     Default: true
@@ -754,6 +754,10 @@ Resources:
       StorageEncrypted: 'true'
       StorageType:
         Ref: DBStorageType
+      DBInstanceIdentifier:
+        Fn::Join:
+          - '-'
+          - [{Ref: 'AWS::StackName'}, 'DB']
       DBSubnetGroupName:
         Ref: PostgresSubnetGroup
       VPCSecurityGroups:
@@ -802,9 +806,9 @@ Resources:
         - Ref: PublicSubnet3
       Scheme: internet-facing
       Listeners:
-      - InstancePort: '443'
+      - InstancePort: '80'
+        InstanceProtocol: HTTP
         Protocol: HTTPS
-        InstanceProtocol: HTTPS
         LoadBalancerPort: '443'
         SSLCertificateId:
           Ref: SSLCertARN
@@ -861,9 +865,9 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       SecurityGroupIngress:
-      - ToPort: '443'
+      - ToPort: '80'
         IpProtocol: tcp
-        FromPort: '443'
+        FromPort: '80'
         SourceSecurityGroupId: !GetAtt LoadBalancerSecurityGroup.GroupId
       VpcId:
         Ref: VPC
@@ -935,7 +939,7 @@ Resources:
             - apt-get update
             - apt-get install ansible awscli unzip -y
             - openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=Private/CN=${AWS::StackName}" -days 3650 -keyout /tmp/server.key -out /tmp/bundle.crt -extensions v3_ca
-            - curl https://github.com/o2Labs/sentry-formation/archive/master.zip --output /tmp/repo.zip --location
+            - curl https://github.com/tamino-martinius/cloudformation-sentry/archive/master.zip --output /tmp/repo.zip --location
             - unzip /tmp/repo.zip -d /tmp
             - echo "${DeploymentHosts}" > /tmp/hosts.base64
             - base64 -d /tmp/hosts.base64 > /tmp/hosts.encrypted
