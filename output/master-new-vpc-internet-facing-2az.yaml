@@ -768,7 +768,7 @@ Resources:
         Interval: 10
         Timeout: 5
         UnhealthyThreshold: 10
-        Target: HTTPS:443/_health/
+        Target: HTTP:80/_health/
   SentryInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
