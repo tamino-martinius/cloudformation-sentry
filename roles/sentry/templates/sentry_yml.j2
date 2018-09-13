@@ -69,3 +69,7 @@ filestore.backend: 'filesystem'
 filestore.options:
   location: '/tmp/sentry-files'
 {% endif %}
+{% if slack_client_id is defined %}
+slack.client-id: '{{ slack_client_id }}'
+slack.client-secret: '{{ slack_client_secret }}'
+{% endif %}
